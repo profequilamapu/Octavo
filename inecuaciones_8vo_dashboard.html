@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inecuaciones Lineales - 8º Básico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef2 0%, #fff9e6 50%, #e6f3ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #FFB3BA 0%, #C8D9F5 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #5a4a6a;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7a6a8a;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: #FFB3BA;
+            color: #5a4a6a;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .tab-btn.active {
+            background: #C8D9F5;
+            color: white;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid;
+        }
+
+        .card.concept {
+            border-left-color: #FFB3BA;
+        }
+
+        .card.property {
+            border-left-color: #FFDFBA;
+        }
+
+        .card.interval {
+            border-left-color: #FFFFBA;
+        }
+
+        .card.exercise {
+            border-left-color: #BAE1FF;
+        }
+
+        h2 {
+            color: #5a4a6a;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #7a6a8a;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #fff5f7 0%, #f5f9ff 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #FFB3BA;
+        }
+
+        .example {
+            background: #fffef5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #FFFFBA;
+        }
+
+        .property-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .property-list li {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f9f5ff;
+            border-radius: 8px;
+            border-left: 3px solid #FFDFBA;
+        }
+
+        .formula {
+            background: #f5f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #333;
+            margin: 15px 0;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .number-line {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+
+        .line {
+            flex: 1;
+            height: 2px;
+            background: #999;
+            position: relative;
+            min-width: 400px;
+        }
+
+        .point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FFB3BA;
+            top: -5px;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #FFB3BA;
+        }
+
+        .point.open {
+            background: white;
+        }
+
+        .interval-section {
+            background: rgba(173, 216, 230, 0.3);
+            height: 20px;
+            position: absolute;
+            top: -9px;
+            border-radius: 10px;
+        }
+
+        .label {
+            position: absolute;
+            top: -25px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .exercise-box {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #BAE1FF;
+        }
+
+        .exercise-number {
+            background: #BAE1FF;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .solution {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #90EE90;
+        }
+
+        .step {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .step strong {
+            color: #5a4a6a;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #BAE1FF;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .check-btn {
+            background: #BAE1FF;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #a0d1ff;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #C8D9F5;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f9f5ff;
+        }
+
+        .color-box {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .highlight-positive {
+            background: #BAE1FF;
+        }
+
+        .highlight-negative {
+            background: #FFB3BA;
+        }
+
+        .icon {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .tip {
+            background: #fff4e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+
+        .tip strong {
+            color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📐 Inecuaciones Lineales</h1>
+            <p class="subtitle">8º Básico - Matemática</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('conceptos')">Conceptos</button>
+            <button class="tab-btn" onclick="showTab('propiedades')">Propiedades</button>
+            <button class="tab-btn" onclick="showTab('intervalos')">Intervalos</button>
+            <button class="tab-btn" onclick="showTab('resueltos')">Ejercicios Resueltos</button>
+            <button class="tab-btn" onclick="showTab('practica')">Práctica Interactiva</button>
+        </div>
+
+        <!-- CONCEPTOS -->
+        <div id="conceptos" class="content active">
+            <div class="card concept">
+                <h2>¿Qué es una inecuación?</h2>
+                <div class="definition">
+                    <p>Una <strong>inecuación</strong> es una desigualdad que contiene una o más incógnitas. Es una relación de orden entre dos expresiones algebraicas.</p>
+                </div>
+                
+                <h3>Símbolos de desigualdad</h3>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Símbolo</th>
+                            <th>Significado</th>
+                            <th>Ejemplo</th>
+                        </tr>
+                        <tr>
+                            <td><span class="color-box highlight-positive">&lt;</span></td>
+                            <td>Menor que</td>
+                            <td>x &lt; 5</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-box highlight-positive">&gt;</span></td>
+                            <td>Mayor que</td>
+                            <td>x &gt; -2</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-box highlight-positive">≤</span></td>
+                            <td>Menor o igual que</td>
+                            <td>x ≤ 10</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-box highlight-positive">≥</span></td>
+                            <td>Mayor o igual que</td>
+                            <td>x ≥ -3</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Diferencia entre ecuación e inecuación</h3>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Ecuación</th>
+                            <th>Inecuación</th>
+                        </tr>
+                        <tr>
+                            <td>x + 2 = 5</td>
+                            <td>x + 2 &gt; 5</td>
+                        </tr>
+                        <tr>
+                            <td>Una solución: x = 3</td>
+                            <td>Infinitas soluciones: x &gt; 3</td>
+                        </tr>
+                        <tr>
+                            <td>Igualdad (=)</td>
+                            <td>Desigualdad (&lt;, &gt;, ≤, ≥)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="example">
+                    <h3>Ejemplo:</h3>
+                    <p><strong>3x - 5 &lt; 10</strong></p>
+                    <p>Esta inecuación tiene infinitas soluciones: todos los números menores que 5.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROPIEDADES -->
+        <div id="propiedades" class="content">
+            <div class="card property">
+                <h2>Propiedades de las desigualdades</h2>
+                <p>Las propiedades nos ayudan a resolver inecuaciones de forma similar a las ecuaciones.</p>
+
+                <h3>1. Propiedad de la suma y resta</h3>
+                <div class="definition">
+                    <p>Si sumamos o restamos un mismo número a ambos lados de una desigualdad, <strong>la desigualdad se mantiene</strong>.</p>
+                    <div class="formula">Si a &lt; b, entonces a + c &lt; b + c</div>
+                </div>
+                <div class="example">
+                    <strong>Ejemplo:</strong><br>
+                    x - 3 &lt; 7<br>
+                    x - 3 + 3 &lt; 7 + 3<br>
+                    x &lt; 10
+                </div>
+
+                <h3>2. Propiedad de la multiplicación y división por positivo</h3>
+                <div class="definition">
+                    <p>Si multiplicamos o dividimos por un número <span class="highlight-positive">positivo</span>, <strong>la desigualdad se mantiene igual</strong>.</p>
+                    <div class="formula">Si a &lt; b y c &gt; 0, entonces a·c &lt; b·c</div>
+                </div>
+                <div class="example">
+                    <strong>Ejemplo:</strong><br>
+                    2x &lt; 8<br>
+                    2x ÷ 2 &lt; 8 ÷ 2<br>
+                    x &lt; 4
+                </div>
+
+                <h3>3. Propiedad de la multiplicación y división por negativo ⚠️</h3>
+                <div class="definition">
+                    <p>Si multiplicamos o dividimos por un número <span class="highlight-negative">negativo</span>, <strong>la desigualdad se INVIERTE</strong>.</p>
+                    <div class="formula">Si a &lt; b y c &lt; 0, entonces a·c &gt; b·c</div>
+                </div>
+                <div class="example">
+                    <strong>Ejemplo:</strong><br>
+                    -2x &lt; 8<br>
+                    -2x ÷ (-2) &gt; 8 ÷ (-2)  ← ¡El símbolo cambió!<br>
+                    x &gt; -4
+                </div>
+
+                <div class="tip">
+                    <strong>💡 Recuerda:</strong> Cuando multiplicas o divides una inecuación por un número negativo, ¡NO OLVIDES cambiar el símbolo de desigualdad!
+                </div>
+
+                <h3>Resumen de propiedades</h3>
+                <ul class="property-list">
+                    <li>✓ Suma/resta: La desigualdad se <strong>MANTIENE</strong></li>
+                    <li>✓ Multiplica/divide por positivo: La desigualdad se <strong>MANTIENE</strong></li>
+                    <li>✗ Multiplica/divide por negativo: La desigualdad se <strong>INVIERTE</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- INTERVALOS -->
+        <div id="intervalos" class="content">
+            <div class="card interval">
+                <h2>Representación en intervalos</h2>
+                <p>Las soluciones de una inecuación se pueden representar como un intervalo en la recta numérica.</p>
+
+                <h3>Tipos de intervalos</h3>
+
+                <div class="example">
+                    <h4>Intervalo abierto: (a, b)</h4>
+                    <p>Incluye todos los números entre a y b, <strong>sin incluir los extremos</strong>.</p>
+                    <div class="formula">x ∈ (3, 8)  o  3 &lt; x &lt; 8</div>
+                    <div class="number-line">
+                        <div class="line">
+                            <div class="point open" style="left: 15%;"></div>
+                            <div class="point open" style="left: 85%;"></div>
+                            <div class="interval-section" style="left: 15%; width: 70%;"></div>
+                            <span class="label" style="left: 15%;">3</span>
+                            <span class="label" style="left: 85%;">8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <h4>Intervalo cerrado: [a, b]</h4>
+                    <p>Incluye todos los números entre a y b, <strong>incluyendo los extremos</strong>.</p>
+                    <div class="formula">x ∈ [3, 8]  o  3 ≤ x ≤ 8</div>
+                    <div class="number-line">
+                        <div class="line">
+                            <div class="point" style="left: 15%;"></div>
+                            <div class="point" style="left: 85%;"></div>
+                            <div class="interval-section" style="left: 15%; width: 70%; background: rgba(100, 180, 220, 0.5);"></div>
+                            <span class="label" style="left: 15%;">3</span>
+                            <span class="label" style="left: 85%;">8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <h4>Intervalo semiabierto: [a, b) o (a, b]</h4>
+                    <p>Incluye un extremo pero no el otro.</p>
+                    <div class="formula">x ∈ [3, 8)  o  3 ≤ x &lt; 8</div>
+                    <div class="number-line">
+                        <div class="line">
+                            <div class="point" style="left: 15%;"></div>
+                            <div class="point open" style="left: 85%;"></div>
+                            <div class="interval-section" style="left: 15%; width: 70%;"></div>
+                            <span class="label" style="left: 15%;">3</span>
+                            <span class="label" style="left: 85%;">8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <h4>Intervalo infinito: [a, +∞) o (-∞, b]</h4>
+                    <p>Se extiende hacia el infinito.</p>
+                    <div class="formula">x ∈ [3, +∞)  o  x ≥ 3</div>
+                </div>
+
+                <div class="tip">
+                    <strong>📌 Resumen:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Bolita <strong>abierta (blanca)</strong> = NO se incluye el número</li>
+                        <li>Bolita <strong>cerrada (rellena)</strong> = SÍ se incluye el número</li>
+                        <li><strong>] [</strong> = Intervalo abierto</li>
+                        <li><strong>[ ]</strong> = Intervalo cerrado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIOS RESUELTOS -->
+        <div id="resueltos" class="content">
+            <div class="card exercise">
+                <h2>Ejercicios Resueltos</h2>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">1</div>
+                    <p><strong>x - 4 &gt; 2</strong></p>
+                    <div class="solution">
+                        <div class="step"><strong>Paso 1:</strong> Sumar 4 a ambos lados</div>
+                        <div class="step" style="margin-left: 20px;">x - 4 + 4 &gt; 2 + 4</div>
+                        <div class="step"><strong>Paso 2:</strong> Simplificar</div>
+                        <div class="step" style="margin-left: 20px;">x &gt; 6</div>
+                        <div class="step"><strong>Solución:</strong> <span class="color-box highlight-positive">x ∈ (6, +∞)</span></div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">2</div>
+                    <p><strong>3x ≤ 15</strong></p>
+                    <div class="solution">
+                        <div class="step"><strong>Paso 1:</strong> Dividir por 3 (número positivo)</div>
+                        <div class="step" style="margin-left: 20px;">3x ÷ 3 ≤ 15 ÷ 3</div>
+                        <div class="step"><strong>Paso 2:</strong> Simplificar</div>
+                        <div class="step" style="margin-left: 20px;">x ≤ 5</div>
+                        <div class="step"><strong>Solución:</strong> <span class="color-box highlight-positive">x ∈ (-∞, 5]</span></div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">3</div>
+                    <p><strong>-2x &lt; 8</strong></p>
+                    <div class="solution">
+                        <div class="step"><strong>Paso 1:</strong> Dividir por -2 (número negativo) ⚠️</div>
+                        <div class="step" style="margin-left: 20px;">-2x ÷ (-2) <span class="highlight-negative">&gt;</span> 8 ÷ (-2)</div>
+                        <div class="step"><strong>Paso 2:</strong> ¡El símbolo se INVIERTE!</div>
+                        <div class="step" style="margin-left: 20px;">x &gt; -4</div>
+                        <div class="step"><strong>Solución:</strong> <span class="color-box highlight-positive">x ∈ (-4, +∞)</span></div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">4</div>
+                    <p><strong>2x + 3 &gt; 11</strong></p>
+                    <div class="solution">
+                        <div class="step"><strong>Paso 1:</strong> Restar 3 a ambos lados</div>
+                        <div class="step" style="margin-left: 20px;">2x + 3 - 3 &gt; 11 - 3</div>
+                        <div class="step"><strong>Paso 2:</strong> Simplificar</div>
+                        <div class="step" style="margin-left: 20px;">2x &gt; 8</div>
+                        <div class="step"><strong>Paso 3:</strong> Dividir por 2</div>
+                        <div class="step" style="margin-left: 20px;">x &gt; 4</div>
+                        <div class="step"><strong>Solución:</strong> <span class="color-box highlight-positive">x ∈ (4, +∞)</span></div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">5</div>
+                    <p><strong>-3x - 5 ≥ 4</strong></p>
+                    <div class="solution">
+                        <div class="step"><strong>Paso 1:</strong> Sumar 5 a ambos lados</div>
+                        <div class="step" style="margin-left: 20px;">-3x - 5 + 5 ≥ 4 + 5</div>
+                        <div class="step"><strong>Paso 2:</strong> Simplificar</div>
+                        <div class="step" style="margin-left: 20px;">-3x ≥ 9</div>
+                        <div class="step"><strong>Paso 3:</strong> Dividir por -3 (número negativo) ⚠️</div>
+                        <div class="step" style="margin-left: 20px;">x <span class="highlight-negative">≤</span> -3</div>
+                        <div class="step"><strong>Solución:</strong> <span class="color-box highlight-positive">x ∈ (-∞, -3]</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRÁCTICA INTERACTIVA -->
+        <div id="practica" class="content">
+            <div class="card exercise">
+                <h2>Practica resolviendo inecuaciones</h2>
+                <p>Resuelve cada inecuación y escribe la respuesta en notación de intervalo.</p>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">1</div>
+                    <p><strong>x + 5 &lt; 12</strong></p>
+                    <p>Respuesta:</p>
+                    <input type="text" class="answer-input" id="ans1" placeholder="Ej: (-∞, 7)">
+                    <button class="check-btn" onclick="checkAnswer(1, '(-∞, 7)', 'x < 7')">Verificar</button>
+                    <div class="feedback" id="feedback1"></div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">2</div>
+                    <p><strong>2x ≥ 10</strong></p>
+                    <p>Respuesta:</p>
+                    <input type="text" class="answer-input" id="ans2" placeholder="Ej: [5, +∞)">
+                    <button class="check-btn" onclick="checkAnswer(2, '[5, +∞)', 'x ≥ 5')">Verificar</button>
+                    <div class="feedback" id="feedback2"></div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">3</div>
+                    <p><strong>-x &lt; 4</strong></p>
+                    <p>Respuesta:</p>
+                    <input type="text" class="answer-input" id="ans3" placeholder="Ej: (-4, +∞)">
+                    <button class="check-btn" onclick="checkAnswer(3, '(-4, +∞)', 'x > -4')">Verificar</button>
+                    <div class="feedback" id="feedback3"></div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">4</div>
+                    <p><strong>3x - 2 ≤ 7</strong></p>
+                    <p>Respuesta:</p>
+                    <input type="text" class="answer-input" id="ans4" placeholder="Ej: (-∞, 3]">
+                    <button class="check-btn" onclick="checkAnswer(4, '(-∞, 3]', 'x ≤ 3')">Verificar</button>
+                    <div class="feedback" id="feedback4"></div>
+                </div>
+
+                <div class="exercise-box">
+                    <div class="exercise-number">5</div>
+                    <p><strong>-2x + 1 &gt; -5</strong></p>
+                    <p>Respuesta:</p>
+                    <input type="text" class="answer-input" id="ans5" placeholder="Ej: (-3, +∞)">
+                    <button class="check-btn" onclick="checkAnswer(5, '(-3, +∞)', 'x < 3')">Verificar</button>
+                    <div class="feedback" id="feedback5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Dashboard de Inecuaciones Lineales - 8º Básico 📚</p>
+        <p>Aprende al tu propio ritmo</p>
+    </footer>
+
+    <script>
+        function showTab(tabName) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Desactivar todos los botones
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mostrar contenido seleccionado
+            document.getElementById(tabName).classList.add('active');
+
+            // Activar botón seleccionado
+            event.target.classList.add('active');
+        }
+
+        function checkAnswer(questionNum, correctAnswer, explanation) {
+            const input = document.getElementById('ans' + questionNum);
+            const feedback = document.getElementById('feedback' + questionNum);
+            const userAnswer = input.value.trim().replace(/\s/g, '');
+            const correct = correctAnswer.replace(/\s/g, '');
+
+            if (userAnswer === correct || userAnswer === correct.replace(/∞/g, 'inf')) {
+                feedback.classList.remove('incorrect');
+                feedback.classList.add('correct');
+                feedback.innerHTML = `✅ <strong>¡Correcto!</strong> La solución es ${explanation}`;
+            } else {
+                feedback.classList.remove('correct');
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = `❌ <strong>Intenta de nuevo.</strong> Recuerda que la solución es ${explanation}`;
+            }
+        }
+    </script>
+</body>
+</html>
